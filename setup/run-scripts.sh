@@ -17,6 +17,6 @@ for m in "${modules[@]}"; do
              $(ls demos/$m/99-*.sql 2>/dev/null || true); do
         if head -5 "$f" | grep -q -- '-- ci: skip'; then echo "skip $f"; continue; fi
         echo "run  $f"
-        $engine exec -i sqloptcourse /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -C -b -I < "$f" >/dev/null
+        $engine exec -i -e SQLCMDPASSWORD sqloptcourse /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -C -b -I < "$f" >/dev/null
     done
 done
