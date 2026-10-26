@@ -2,7 +2,7 @@
 
 Objectif : appliquer les deux gestes du module à d'autres objets que ceux des
 démonstrations. Dans la première partie, capturer une charge par deux sessions d'événements
-étendus et compter ses requêtes par forme ; dans la seconde, provoquer un verrou mortel sur
+étendus et compter ses requêtes par forme ; dans la seconde, provoquer un interblocage sur
 deux autres tables, le relire dans `system_health` et le corriger.
 
 L'exercice se joue sur votre labo. Il crée des sessions d'événements étendus et les
@@ -42,19 +42,19 @@ paramètre ; trois rapports qui lisent des tables entières.
    requête la plus fréquente est-elle invisible dans le premier regroupement ?
 6. Arrêtez les sessions. Que reste-t-il du fichier, de l'histogramme et du `ring_buffer` ?
 
-## Partie 2. Un verrou mortel entre une facture et son paiement
+## Partie 2. Un interblocage entre une facture et son paiement
 
 Les deux transactions modifient la facture `FA2026-006089` et son paiement `106875`, dans
 l'ordre inverse l'une de l'autre, avec une pause de cinq secondes entre les deux `UPDATE`.
 
 1. Lancez `3a-window-1.sql` dans une fenêtre, puis `3b-window-2.sql` dans une autre dans les
    cinq secondes. Que reçoit chacune ?
-2. Retrouvez le verrou mortel dans les fichiers de `system_health`. Quel processus a été
+2. Retrouvez l'interblocage dans les fichiers de `system_health`. Quel processus a été
    choisi comme victime, et pourquoi celui-là ? Comparez leur `logused`.
 3. Quelles ressources sont en jeu ? Pour chacune, quel index, quel mode de verrou tenu, quel
    mode demandé, et par qui ?
 4. Le graphe peut mettre jusqu'à deux minutes à arriver dans le fichier. D'où vient ce délai,
    et comment le raccourcir pour votre lecture ?
 5. Corrigez l'ordre d'accès de la fenêtre 2, rejouez les deux fenêtres, et vérifiez que
-   `system_health` ne reçoit pas de nouveau verrou mortel. Combien de temps la fenêtre 2
+   `system_health` ne reçoit pas de nouvel interblocage. Combien de temps la fenêtre 2
    attend-elle ?
