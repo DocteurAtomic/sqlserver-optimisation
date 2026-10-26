@@ -1,0 +1,26 @@
+# Lab of the course: SQL Server 2025 Developer with PachadataTraining and LuminaQuant.
+# Start it and restore the databases with: ./setup/install.sh
+# Memory and processors are bounded on purpose: the memory and parallelism modules depend on it.
+services:
+  sql:
+    image: mcr.microsoft.com/mssql/server:2025-CU7-ubuntu-24.04
+    container_name: sqloptcourse
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+      MSSQL_AGENT_ENABLED: "true"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:-Course-2026!lab}
+      SQLCMDPASSWORD: ${MSSQL_SA_PASSWORD:-Course-2026!lab}
+    ports:
+      - "127.0.0.1:${SQLPORT:-14333}:1433"
+    mem_limit: 6g
+    cpus: 4
+    volumes:
+      - sqldata:/var/opt/mssql
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-C", "-Q", "SELECT 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+volumes:
+  sqldata:
