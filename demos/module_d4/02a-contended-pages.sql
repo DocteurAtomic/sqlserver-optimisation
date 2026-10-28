@@ -37,9 +37,9 @@ WITH pages AS (
 )
 SELECT TOP (8) p.wait_type, p.page, COUNT(*) AS samples,
        OBJECT_NAME(pi.object_id, 2) AS object_name,
-       CASE WHEN p.page_id = 1 OR p.page_id % 8088 = 0 THEN N'PFS'
-            WHEN p.page_id % 511232 = 2 THEN N'GAM'
-            WHEN p.page_id % 511232 = 3 THEN N'SGAM'
+       CASE WHEN p.page_id = 1 OR (p.page_id > 0 AND p.page_id % 8088 = 0) THEN N'PFS'
+            WHEN p.page_id = 2 OR (p.page_id > 2 AND p.page_id % 511232 = 0) THEN N'GAM'
+            WHEN p.page_id = 3 OR (p.page_id > 3 AND p.page_id % 511232 = 1) THEN N'SGAM'
             ELSE N'' END AS allocation_page
 FROM pages AS p
 CROSS APPLY sys.dm_db_page_info(2, p.file_id, p.page_id, 'LIMITED') AS pi
